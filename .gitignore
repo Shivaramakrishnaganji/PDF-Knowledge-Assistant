@@ -1,0 +1,15 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.env
+
+# Vector database files (we don't want to upload large generated vector stores)
+faiss_index/
+
+# Streamlit specific
+.streamlit/secrets.toml
