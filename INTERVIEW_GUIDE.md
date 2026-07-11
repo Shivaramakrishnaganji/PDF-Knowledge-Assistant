@@ -62,9 +62,21 @@ In LangChain, high-level chains hide the internal logic. By writing the retrieva
 ### Q: What happens if two chunks have contradicting information?
 **A:** The LLM will see both chunks in the context prompt. How it responds depends entirely on the system prompt. Since my prompt says "If the context is ambiguous, explain the ambiguity based only on the text," GPT should ideally respond by noting that the document contains conflicting statements.
 
+### Q: Where are the PDFs actually stored when a user uploads them, and for how long?
+**A:** When a user uploads a PDF, it is held in memory by Streamlit. In my code (`src/loader.py`), I explicitly use Python's `tempfile.NamedTemporaryFile` to write the PDF to the server's temporary `/tmp` directory just long enough for `PyPDFLoader` to read it. Once the extraction is done, the temporary file is immediately deleted from the disk. Therefore, the PDFs are not permanently stored anywhere.
+
+### Q: How long are the embeddings/vectors stored? What is the time limit?
+**A:** The vectors are stored strictly in Streamlit's **Session State** (`st.session_state`). Session State is tied exclusively to the user's current browser tab. The vectors exist in the server's RAM only for as long as that specific browser tab remains open and active. If the user refreshes the page, closes the tab, or if the app goes to sleep due to inactivity, the vectors are completely destroyed.
+
+### Q: What happens if 10 concurrent users open the app simultaneously and upload different PDFs? Can one user see another user's data?
+**A:** No, data bleeding is impossible in this architecture. This is because Streamlit handles every connected user in a completely isolated thread with its own unique `st.session_state`. 
+If 10 users open the app, Streamlit spins up 10 isolated sessions. User A's FAISS vector store is stored in User A's session state, and User B's FAISS store is in User B's session state. They run concurrently in server RAM but never intersect, ensuring complete data privacy between concurrent users.
+
 ---
 
-## 4. Project Limitations & Future Scope
+## 🚀 Final Advice for the Candidate
+
+### 4. Project Limitations & Future Scope
 If an interviewer asks "What would you improve?", this is how you answer:
 
 1. **No Memory:** The current implementation is single-turn. If I ask "What is X?", and then follow up with "Tell me more about it", the system will fail because it doesn't remember the previous question. **Improvement:** Add LangChain's `ConversationBufferMemory` to pass chat history into the LLM prompt.
