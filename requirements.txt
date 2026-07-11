@@ -2,10 +2,10 @@
 streamlit==1.36.0
 
 # LangChain core and community integrations
-langchain==0.2.6
-langchain-community==0.2.6
-langchain-core==0.2.11
-langchain-text-splitters==0.2.2
+langchain>=0.2.6
+langchain-community>=0.2.6
+langchain-core>=0.2.17
+langchain-text-splitters>=0.2.2
 
 # OpenAI integration for LLM and Embeddings
 langchain-openai==0.1.16
