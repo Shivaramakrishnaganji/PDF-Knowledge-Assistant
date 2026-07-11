@@ -27,10 +27,10 @@ def get_embedding_model() -> GoogleGenerativeAIEmbeddings:
     try:
         logger.info("Initializing Google Generative AI Embeddings model...")
         
-        # We use the text-embedding-004 model, which is Google's highly stable embedding model.
+        # We use the gemini-embedding-2 model, which is Google's newest embedding model.
         # It requires the API key to authenticate with Google's servers.
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004",
+            model="models/gemini-embedding-2",
             google_api_key=GOOGLE_API_KEY
         )
         

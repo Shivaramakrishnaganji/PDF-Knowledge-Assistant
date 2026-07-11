@@ -65,29 +65,7 @@ def process_uploaded_file(uploaded_file):
         st.success(f"Successfully processed **{uploaded_file.name}**!")
         
     except Exception as e:
-        error_msg = str(e)
-        st.error(f"An error occurred while processing the PDF: {error_msg}")
-        
-        # Diagnostic check for 404 Embedding Model errors
-        if "404" in error_msg and "is not found" in error_msg:
-            try:
-                import google.generativeai as genai
-                from src.config import GOOGLE_API_KEY
-                genai.configure(api_key=GOOGLE_API_KEY)
-                
-                # Fetch available models
-                available_models = []
-                for m in genai.list_models():
-                    if 'embedContent' in m.supported_generation_methods:
-                        available_models.append(m.name)
-                        
-                if available_models:
-                    st.info(f"**Diagnostic Info:** Your API key supports these embedding models:\n\n`{', '.join(available_models)}`")
-                    st.warning("Please let Antigravity know which models are listed above so we can update the code!")
-                else:
-                    st.error("**Diagnostic Info:** Your API key does not have access to ANY embedding models.")
-            except Exception as diag_e:
-                st.error(f"Could not run diagnostic check: {str(diag_e)}")
+        st.error(f"An error occurred while processing the PDF: {str(e)}")
 
 
 # -----------------------------------------------------------------------------
