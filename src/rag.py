@@ -61,9 +61,9 @@ def generate_answer(
         formatted_prompt = prompt_template.format(context=context_text, question=question)
         
         # Step 4: Initialize the LLM
-        # We use Gemini 2.5 Flash as requested.
+        # We use Gemini 1.5 Flash, which is universally available and extremely fast.
         llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-flash",
+            model="gemini-1.5-flash",
             google_api_key=GOOGLE_API_KEY,
             temperature=0.0  # Temperature 0 means highly deterministic (less creative, more factual)
         )
