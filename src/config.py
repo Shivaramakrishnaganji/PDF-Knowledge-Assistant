@@ -41,9 +41,9 @@ def get_logger(name: str) -> logging.Logger:
         
     return logger
 
-# Fetch the Google API key from environment variables.
+# Fetch the OpenAI API key from environment variables.
 # If it's missing, we raise an error immediately so the developer knows what to fix.
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
     logger = get_logger(__name__)
-    logger.warning("GOOGLE_API_KEY is not set in the environment variables. The application may fail.")
+    logger.warning("OPENAI_API_KEY is not set in the environment variables. The application may fail.")

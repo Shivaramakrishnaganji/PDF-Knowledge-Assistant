@@ -34,10 +34,10 @@ In LangChain, high-level chains hide the internal logic. By writing the retrieva
 1. **Upload:** The user uploads a PDF via the Streamlit UI. The file is temporarily saved to the server.
 2. **Extraction:** `PyPDFLoader` reads the file and extracts the text page by page.
 3. **Chunking:** `RecursiveCharacterTextSplitter` breaks the text into 700-character chunks.
-4. **Embedding & Storage:** We send these chunks to Google's embedding model to convert them into vectors, and store them in a FAISS vector database.
-5. **Querying:** When the user asks a question, we embed the question using the same Google model.
+4. **Embedding & Storage:** We send these chunks to OpenAI's embedding model (`text-embedding-3-small`) to convert them into vectors, and store them in a FAISS vector database.
+5. **Querying:** When the user asks a question, we embed the question using the same OpenAI model.
 6. **Retrieval:** We perform a similarity search in FAISS to find the top 4 most relevant chunks.
-7. **Generation:** We insert those chunks into a strict Prompt Template along with the user's question, and send it to Gemini 2.5 Flash.
+7. **Generation:** We insert those chunks into a strict Prompt Template along with the user's question, and send it to OpenAI's GPT (e.g., `gpt-4.1-mini` or `gpt-4o-mini`).
 8. **Display:** We display the generated answer and the source chunks in the Streamlit UI.
 
 ### Q: Why did you use Python logging instead of print statements?
@@ -47,7 +47,7 @@ In LangChain, high-level chains hide the internal logic. By writing the retrieva
 **A:** Two ways. First, through the architecture (RAG), which provides factual context. Second, through a strict System Prompt. I explicitly wrote in `src/prompts.py`: *"If the answer is not contained within the provided context, clearly state: 'I don't know'."* I also set the LLM's `temperature` parameter to 0.0, making its responses highly deterministic and less creative.
 
 ### Q: How did you handle environment variables and security?
-**A:** I used the `python-dotenv` library. The Google API key is stored in a `.env` file, which is explicitly ignored by Git (via `.gitignore`) so it never gets pushed to GitHub. In production (Streamlit Cloud), the key is securely injected using Streamlit Secrets. Furthermore, my `src/config.py` explicitly checks for the key at runtime and logs a warning if it's missing.
+**A:** I used the `python-dotenv` library. The OpenAI API key is stored in a `.env` file, which is explicitly ignored by Git (via `.gitignore`) so it never gets pushed to GitHub. In production (Streamlit Cloud), the key is securely injected using Streamlit Secrets. Furthermore, my `src/config.py` explicitly checks for the key at runtime and logs a warning if it's missing.
 
 ### Q: Why Streamlit? Why not React/Node.js?
 **A:** Streamlit allows Python developers to build interactive, data-driven web applications extremely fast without writing frontend code. For AI and data science prototypes, the time-to-market is unbeatable. If this were a consumer-facing app with thousands of concurrent users, I would separate the backend into FastAPI and build a React frontend, but for a portfolio RAG project, Streamlit is the industry standard.
@@ -60,7 +60,7 @@ In LangChain, high-level chains hide the internal logic. By writing the retrieva
 **A:** By default, FAISS uses an exact search (Flat L2 index), which has a time complexity of `O(N * D)`, where N is the number of chunks and D is the dimensionality of the embeddings. For small documents, this is instantaneous. If we scaled this to millions of documents, we would switch FAISS to use an IVF (Inverted File) index or HNSW (Hierarchical Navigable Small World) graph to reduce the search time to `O(log N)`.
 
 ### Q: What happens if two chunks have contradicting information?
-**A:** The LLM will see both chunks in the context prompt. How it responds depends entirely on the system prompt. Since my prompt says "If the context is ambiguous, explain the ambiguity based only on the text," Gemini should ideally respond by noting that the document contains conflicting statements.
+**A:** The LLM will see both chunks in the context prompt. How it responds depends entirely on the system prompt. Since my prompt says "If the context is ambiguous, explain the ambiguity based only on the text," GPT should ideally respond by noting that the document contains conflicting statements.
 
 ---
 

@@ -8,7 +8,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.36-FF4B4B.svg)](https://streamlit.io/)
 [![LangChain](https://img.shields.io/badge/LangChain-0.2.6-green.svg)](https://langchain.com/)
 [![FAISS](https://img.shields.io/badge/FAISS-CPU-blue.svg)](https://github.com/facebookresearch/faiss)
-[![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-orange.svg)](https://ai.google.dev/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-brightgreen.svg)](https://openai.com/)
 
 </div>
 
@@ -16,7 +16,7 @@
 
 ## 📖 Project Overview
 
-This project is a **production-quality Document Question Answering System** built to demonstrate the power of RAG architectures. It allows users to upload any PDF document, parses its contents, and uses Google's Gemini LLM to answer user questions strictly based on the provided text.
+This project is a **production-quality Document Question Answering System** built to demonstrate the power of RAG architectures. It allows users to upload any PDF document, parses its contents, and uses OpenAI's GPT models to answer user questions strictly based on the provided text.
 
 The system is designed with **clean architecture**, modularity, and explicit RAG implementation (avoiding black-box wrappers) to maximize educational value and maintainability.
 
@@ -34,7 +34,7 @@ The system is designed with **clean architecture**, modularity, and explicit RAG
 graph TD
     A[User Uploads PDF] --> B[PyPDFLoader extracts text]
     B --> C[RecursiveCharacterTextSplitter creates chunks]
-    C --> D[GoogleGenerativeAIEmbeddings creates vectors]
+    C --> D[OpenAIEmbeddings creates vectors]
     D --> E[(FAISS Vector Database)]
     
     F[User Asks Question] --> G[Embed Question]
@@ -42,7 +42,7 @@ graph TD
     E --> H
     H --> I[Retrieve Top-K Chunks]
     I --> J[Format Context & Prompt]
-    J --> K[Gemini 2.5 Flash LLM]
+    J --> K[GPT-4o-mini LLM]
     K --> L[Streamlit displays Answer & Sources]
 ```
 
@@ -59,7 +59,7 @@ pdf-knowledge-assistant/
 │   ├── constants.py       # Magic numbers (Chunk size, Top K)
 │   ├── loader.py          # PDF text extraction
 │   ├── splitter.py        # Text chunking logic
-│   ├── embeddings.py      # Google Embeddings setup
+│   ├── embeddings.py      # OpenAI Embeddings setup
 │   ├── vectorstore.py     # FAISS database creation
 │   ├── rag.py             # Explicit retrieval and LLM call pipeline
 │   └── prompts.py         # System prompt templates
@@ -88,8 +88,8 @@ pdf-knowledge-assistant/
 
 4. **Set up environment variables**:
    - Copy `.env.example` to a new file named `.env`.
-   - Get a free Google API Key from [Google AI Studio](https://aistudio.google.com/).
-   - Add the key to your `.env` file: `GOOGLE_API_KEY=your_key_here`.
+   - Get a developer API Key from [OpenAI](https://platform.openai.com/).
+   - Add the key to your `.env` file: `OPENAI_API_KEY=your_key_here`.
 
 5. **Run the application**:
    ```bash
@@ -106,9 +106,9 @@ This project is fully ready to be deployed for **free** on Streamlit Community C
    - Select your repository (`Shivaramakrishnaganji/PDF-Knowledge-Assistant`), branch (`main`), and set the main file path to `app.py`.
 3. **Set Secrets**:
    - Before clicking "Deploy", click on **Advanced settings**.
-   - Under the **Secrets** field, paste your Google API key:
+   - Under the **Secrets** field, paste your OpenAI API key:
      ```toml
-     GOOGLE_API_KEY="your_actual_api_key_here"
+     OPENAI_API_KEY="your_actual_api_key_here"
      ```
    - Click Save, then **Deploy!**
 

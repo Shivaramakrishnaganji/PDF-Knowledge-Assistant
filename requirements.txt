@@ -7,9 +7,8 @@ langchain-community==0.2.6
 langchain-core==0.2.11
 langchain-text-splitters==0.2.2
 
-# Google Generative AI integration for Gemini and Embeddings
-langchain-google-genai>=1.0.7
-google-generativeai>=0.7.2
+# OpenAI integration for LLM and Embeddings
+langchain-openai==0.1.16
 
 # FAISS for vector database (CPU version is sufficient for this project)
 faiss-cpu==1.8.0.post1
