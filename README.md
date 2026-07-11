@@ -18,7 +18,15 @@
 
 This project is a **production-quality Document Question Answering System** built to demonstrate the power of RAG architectures. It allows users to upload any PDF document, parses its contents, and uses OpenAI's GPT models to answer user questions strictly based on the provided text.
 
-The system is designed with **clean architecture**, modularity, and explicit RAG implementation (avoiding black-box wrappers) to maximize educational value and maintainability.
+The system is designed with **clean architecture**, modularity, and explicit RAG implementation (avoiding black-box wrappers) to maximize educational value and maintainability. It features dynamic model fallback logic to ensure maximum uptime.
+
+## 🛠️ Tech Stack Highlights
+- **Frontend:** Streamlit
+- **AI Framework:** LangChain (Core & Community)
+- **Large Language Model (LLM):** OpenAI `gpt-4.1-mini` (with dynamic fallback to `gpt-4o-mini`)
+- **Embeddings:** OpenAI `text-embedding-3-small`
+- **Vector Database:** FAISS (Facebook AI Similarity Search)
+- **Document Processing:** PyPDF
 
 ## ✨ Features
 
@@ -42,8 +50,11 @@ graph TD
     E --> H
     H --> I[Retrieve Top-K Chunks]
     I --> J[Format Context & Prompt]
-    J --> K[GPT-4o-mini LLM]
-    K --> L[Streamlit displays Answer & Sources]
+    J --> K{Initialize OpenAI LLM}
+    K -->|Attempt 1| L[gpt-4.1-mini]
+    K -->|Fallback on 404| M[gpt-4o-mini]
+    L --> N[Streamlit displays Answer & Sources]
+    M --> N[Streamlit displays Answer & Sources]
 ```
 
 ## 📁 Folder Structure
